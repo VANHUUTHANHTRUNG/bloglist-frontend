@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 
 import Blogs from './components/Blogs'
 import LoginForm from './components/LoginForm'
@@ -18,6 +18,8 @@ const App = () => {
 
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
+
+  const blogFormRef = useRef(null)
 
   useEffect(() => {
     blogService.getAll().then((blogs) => setBlogs(blogs))
@@ -70,6 +72,8 @@ const App = () => {
   }
 
   async function handleBlogFormSubmit(newObject) {
+    if (!user) return
+    if (blogFormRef.current) blogFormRef.current.toggleVisibility()
     try {
       const addedBlog = await blogService.create(newObject)
       setBlogs(blogs.concat(addedBlog))
@@ -82,24 +86,41 @@ const App = () => {
   }
 
   async function handleLike(likedBlog) {
-    const { author, title, url, id, user } = likedBlog
+    const { author, title, url, id, user } = likedBlog // order matters, undo mongoose.populate in useEffect at the beginning
     const updatedBlog = {
       author,
       title,
       url,
+      user: user.id,
       id,
-      user,
       likes: likedBlog.likes + 1,
     }
     try {
       const result = await blogService.update(updatedBlog)
-      // manually update blogs to render
+      //update blogs in client side
       const updatedBlogs = blogs.map((blog) =>
         result.id === blog.id ? { ...blog, likes: result.likes } : blog
       )
       setBlogs(updatedBlogs)
     } catch (error) {
-      console.log(error)
+      if (error.response.status === 403)
+        setErrorMessage('Updating permission denied')
+      else {
+        setErrorMessage('Unspecified cause for updating failure')
+      }
+    }
+  }
+
+  async function handleRemoveBlog(removeBlog) {
+    try {
+      const { id } = removeBlog
+      await blogService.remove(id)
+      const updatedBlogs = blogs.filter((blog) => blog.id !== id)
+      setBlogs(updatedBlogs)
+    } catch (error) {
+      if (error.response.status === 403)
+        setErrorMessage('Deleting permission denied')
+      else setErrorMessage('Unspecified cause for deleting failure')
     }
   }
 
@@ -120,7 +141,13 @@ const App = () => {
         <Togglable buttonLabel='Create new blog'>
           <BlogForm handleFormSubmit={handleBlogFormSubmit} />
         </Togglable>
-        <Blogs blogs={blogs} handleLike={handleLike} />
+        <Blogs
+          blogs={blogs.sort((first, second) =>
+            first.likes < second.likes ? 1 : -1
+          )}
+          handleLike={handleLike}
+          handleRemoveBlog={handleRemoveBlog}
+        />
       </div>
     )
 

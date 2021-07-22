@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-const Blog = ({ blog, handleLike }) => {
+const Blog = ({ blog, handleLike, handleRemoveBlog }) => {
   const [detailView, setDetailView] = useState(false)
 
   const showWhenDetail = { display: detailView ? '' : 'none' }
@@ -10,6 +10,11 @@ const Blog = ({ blog, handleLike }) => {
     border: 'solid',
     borderWidth: 1,
     marginBottom: 5,
+  }
+
+  async function handleRemoveClicked() {
+    if (window.confirm(`Remove blog ${blog.title} by ${blog.author}`))
+      await handleRemoveBlog(blog)
   }
 
   return (
@@ -31,6 +36,9 @@ const Blog = ({ blog, handleLike }) => {
           </button>
         </p>
         <p>posted here by {blog.user.username} </p>
+        <button type='button' onClick={handleRemoveClicked}>
+          remove
+        </button>
       </div>
     </div>
   )
