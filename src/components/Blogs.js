@@ -1,4 +1,5 @@
 import Blog from './Blog'
+import PropTypes from 'prop-types'
 
 const Blogs = ({ blogs, handleLike, handleRemoveBlog }) => {
   return (
@@ -14,6 +15,12 @@ const Blogs = ({ blogs, handleLike, handleRemoveBlog }) => {
       ))}
     </div>
   )
+}
+
+Blogs.propTypes = {
+  blogs: PropTypes.array.isRequired,
+  handleLike: PropTypes.func.isRequired,
+  handleRemoveBlog: PropTypes.func.isRequired,
 }
 
 export default Blogs

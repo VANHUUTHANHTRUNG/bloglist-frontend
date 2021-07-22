@@ -1,3 +1,5 @@
+import PropTypes from 'prop-types'
+
 const UserPanel = ({ username, handleLogout }) => {
   return (
     <div>
@@ -8,6 +10,11 @@ const UserPanel = ({ username, handleLogout }) => {
       </button>
     </div>
   )
+}
+
+UserPanel.propTypes = {
+  username: PropTypes.string.isRequired,
+  handleLogout: PropTypes.func.isRequired,
 }
 
 export default UserPanel

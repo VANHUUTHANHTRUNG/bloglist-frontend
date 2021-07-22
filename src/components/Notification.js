@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 
 const Notification = ({ message, flag }) => {
   const notificationStyle = {
@@ -16,6 +17,17 @@ const Notification = ({ message, flag }) => {
   }
 
   return <div style={notificationStyle}>{message}</div>
+}
+
+Notification.propTypes = {
+  message: PropTypes.string,
+  flag: PropTypes.string,
+}
+
+Notification.defaultProps = {
+  // remove .isRequired before set null as default
+  message: null,
+  flag: null,
 }
 
 export default Notification
