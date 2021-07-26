@@ -1,3 +1,4 @@
+import React from 'react'
 import Blog from './Blog'
 import PropTypes from 'prop-types'
 

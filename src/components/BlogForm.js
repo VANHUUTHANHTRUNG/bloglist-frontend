@@ -23,7 +23,7 @@ const BlogForm = ({ handleFormSubmit }) => {
   return (
     <div>
       <h2>Create new</h2>
-      <form onSubmit={onSubmit}>
+      <form id='blog-form' onSubmit={onSubmit}>
         <BlogFormInput
           title='Author'
           value={author}
@@ -39,7 +39,9 @@ const BlogForm = ({ handleFormSubmit }) => {
           value={url}
           handleInputChange={({ target }) => setUrl(target.value)}
         />
-        <button type='submit'>Create</button>
+        <button data-testid='submit-create-btn' type='submit'>
+          Create
+        </button>
       </form>
     </div>
   )

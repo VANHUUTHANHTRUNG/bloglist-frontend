@@ -6,7 +6,13 @@ const BlogFormInput = ({ title, value, handleInputChange }) => {
     <div>
       <div>
         {title}
-        <input value={value} type='text' onChange={handleInputChange} />
+        <input
+          data-testid={`${title.toLowerCase()}-input`}
+          id={title.toLowerCase()}
+          value={value}
+          type='text'
+          onChange={handleInputChange}
+        />
       </div>
     </div>
   )

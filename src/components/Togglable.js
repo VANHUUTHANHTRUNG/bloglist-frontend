@@ -17,7 +17,15 @@ const Togglable = React.forwardRef((props, ref) => {
   return (
     <div>
       <div style={hiddenWhenVisible}>
-        <button onClick={toggleVisibility}>{props.buttonLabel}</button>
+        <button
+          data-testid={`${props.buttonLabel
+            .split(' ')
+            .join('-')
+            .toLowerCase()}-btn`}
+          onClick={toggleVisibility}
+        >
+          {props.buttonLabel}
+        </button>
       </div>
       <div style={showWhenVisible}>
         {props.children}
@@ -27,6 +35,7 @@ const Togglable = React.forwardRef((props, ref) => {
   )
 })
 
+Togglable.displayName = 'Togglable'
 Togglable.propTypes = {
   buttonLabel: PropTypes.string.isRequired,
 }

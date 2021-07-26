@@ -16,7 +16,11 @@ const Notification = ({ message, flag }) => {
     return null
   }
 
-  return <div style={notificationStyle}>{message}</div>
+  return (
+    <div data-testid={`${flag}-message`} style={notificationStyle}>
+      {message}
+    </div>
+  )
 }
 
 Notification.propTypes = {

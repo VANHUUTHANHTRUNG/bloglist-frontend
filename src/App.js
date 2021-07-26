@@ -35,11 +35,11 @@ const App = () => {
   }, [])
 
   useEffect(() => {
-    setTimeout(() => setErrorMessage(null), 5000)
+    setTimeout(() => setErrorMessage(null), 10000)
   }, [errorMessage])
 
   useEffect(() => {
-    setTimeout(() => setSuccessMessage(null), 5000)
+    setTimeout(() => setSuccessMessage(null), 10000)
   }, [successMessage])
 
   useEffect(() => {
@@ -117,6 +117,9 @@ const App = () => {
       await blogService.remove(id)
       const updatedBlogs = blogs.filter((blog) => blog.id !== id)
       setBlogs(updatedBlogs)
+      setSuccessMessage(
+        `Blog with title ${removeBlog.title} by ${removeBlog.author} successfully removed`
+      )
     } catch (error) {
       if (error.response.status === 403)
         setErrorMessage('Deleting permission denied')
@@ -137,7 +140,7 @@ const App = () => {
       </Togglable>
     ) : (
       <div>
-        <UserPanel username={user.name} handleLogout={handleLogout} />
+        <UserPanel username={user.username} handleLogout={handleLogout} />
         <Togglable buttonLabel='Create new blog'>
           <BlogForm handleFormSubmit={handleBlogFormSubmit} />
         </Togglable>
